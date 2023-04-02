@@ -7,7 +7,7 @@ public class Tema extends ObjetoDominioImpl {
 	private String nome;
 	
 	private Tema(long id, String nome) {		
-		super(id);
+		ObjetoDominio(id);
 		this.nome = nome;		
 	}
 	
@@ -16,12 +16,12 @@ public class Tema extends ObjetoDominioImpl {
 		return novoTema;
 	}
 	
-	public static Tema reconstituir(long id, String nome) {
-		
+	/*public static Tema reconstituir(long id, String nome) {
+		//Comentado até a implementação de TemaRepositoty
 		Tema temaRecuperado = TemaRepository.getPorId(id);
 		
 		return temaRecuperado;
-	}
+	}*/
 	
 	public String getNome() {
 		return this.nome;
