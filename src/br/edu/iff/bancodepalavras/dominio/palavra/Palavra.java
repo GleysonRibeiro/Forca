@@ -24,7 +24,7 @@ public class Palavra extends ObjetoDominioImpl {
 	private Palavra(long id, String palavra, Tema tema) {
 		if(letraFactory == null) {
 			throw new RuntimeException("letraFacotry não pode ser null");
-		}//Tirar dúvida com o professor de como será setado letraFactory
+		}//Tirar dúvida com o professor de como será setado letraFactory = será setado na classe roxa 
 		
 		this.ObjetoDominio(id);
 		
@@ -55,7 +55,7 @@ public class Palavra extends ObjetoDominioImpl {
 		return letras.get(posicao);
 	}
 	
-	//O que é o objeto Object em + exibir(contexto : Object, posicoes : boolean[]) : void
+	//O que é o objeto Object em + exibir(contexto : Object, posicoes : boolean[]) : void = imprimir todas as letras de palavra
 	
 	public int[] tentar(char codigo) {
 		
