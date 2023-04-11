@@ -10,6 +10,7 @@ public abstract class ObjetoDominioImpl implements ObjetoDominio {
 		
 	}
 	
+	
 	@Override
 	public long getId() {
 		return this.id;
