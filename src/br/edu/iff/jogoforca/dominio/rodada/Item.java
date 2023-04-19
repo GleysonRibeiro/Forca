@@ -11,7 +11,7 @@ public class Item extends ObjetoDominioImpl{
     private Palavra palavra;
     
 
-    private Item (int id, Palavra palavra){ //verificar onde setar o id
+    private Item (int id, Palavra palavra){ 
         this.palavra = palavra;
     }
 

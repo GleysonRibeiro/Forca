@@ -18,6 +18,8 @@ public class Rodada extends ObjetoDominioImpl {
 	private Jogador jogador;
 	private List<Letra> letrasErradas = null;
 	
+	RodadaRepository repo;
+	
 	
 	public static int getMaxPalavras() {
 		return maxPalavras;
@@ -65,7 +67,7 @@ public class Rodada extends ObjetoDominioImpl {
 	}
 	
 	public Rodada reconstituir(long id, Item[] itens, Letra[] erradas, Jogador jogador) {
-		//Verificar como recuperar sem repositorio
+		Rodada rodadaRecuperada = repo.getPorId(id);
 	}
 	
 	private Rodada(long id, Palavra[] palavras, Jogador jogador) {
@@ -108,10 +110,59 @@ public class Rodada extends ObjetoDominioImpl {
 		
 		for(int i = 0; i<this.getNumPalavras();i++) {
 			if(this.itens[i].tentar(codigo)==false) {
-								
+				letrasErradas.add(itens[i].getPalavra().getLetraFactory().getLetra(codigo));				
 			}
 		}
 		
+	}
+	
+	public void arriscar(String[] palavras) {
+		for(int i = 0; i<palavras.length;i++) {
+			itens[i].arriscar(palavras[i]);
+		}
+	}
+	
+	public void exibirItens(Object contexto) {
+		for(int i = 0; i < getMaxPalavras();i++) {
+			itens[i].exibir(contexto);
+		}
+	}
+	
+	public void exibirBoneco(Object contexto) {
+		this.bonecoFactory.getBoneco().exibir(contexto, this.getQtdeErros());
+		
+	}
+	
+	public void exibirPalavras(Object contexto) {
+		for(int i = 0; i < getMaxPalavras(); i++) {
+			itens[i].getPalavra().exibir(contexto);
+		}
+	}
+	
+	public void exibirLetrasErradas(Object contexto) {
+		for(int i = 0; i < this.letrasErradas.size(); i++) {
+			this.letrasErradas.get(i).exibir(contexto);
+		}
+	}
+	
+	public Letra[] getTentativas() {
+
+		int tamanhoTotal = this.getQtdeTentativas();
+		
+		Letra[] tentativas = new Letra[tamanhoTotal];
+		int i;
+		int proxPosicao;
+
+		for(i = 0; i < getMaxPalavras(); i++) {
+			if(i==0) {
+				proxPosicao = 0;
+			}
+			System.arraycopy(itens[i].getLetrasDescobertas(), 0, tentativas, proxPosicao , itens[i].getLetrasDescobertas().length);
+			proxPosicao += itens[i].getLetrasDescobertas().length+1;
+		}
+		
+		System.arraycopy(letrasErradas.toArray(), 0, tentativas, proxPosicao, letrasErradas.toArray().length);
+		return tentativas;
 		
 	}
 }
