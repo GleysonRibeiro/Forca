@@ -149,7 +149,18 @@ public class Rodada extends ObjetoDominioImpl {
 
 		int tamanhoTotal = this.getQtdeTentativas();
 		
-		Letra[] tentativas = new Letra[tamanhoTotal];
+		Letra[] tentativas = new Letra[tamanhoTotal];		
+		
+		System.arraycopy(this.getCertas(), 0, tentativas, 0 , this.getQtdeCertas());
+		System.arraycopy(letrasErradas.toArray(), 0, tentativas, this.getQtdeCertas(), this.getQtdeErros);
+		
+		return tentativas;
+		
+	}
+	
+	public Letra[] getCertas() {
+		int tamanhoTotal = this.getQtdeAcertos();
+		Letra[] certas = new Letra[tamanhoTotal];
 		int i;
 		int proxPosicao;
 
@@ -157,12 +168,77 @@ public class Rodada extends ObjetoDominioImpl {
 			if(i==0) {
 				proxPosicao = 0;
 			}
-			System.arraycopy(itens[i].getLetrasDescobertas(), 0, tentativas, proxPosicao , itens[i].getLetrasDescobertas().length);
-			proxPosicao += itens[i].getLetrasDescobertas().length+1;
+			System.arraycopy(itens[i].getLetrasDescobertas(), 0, certas, proxPosicao , itens[i].getLetrasDescobertas().length);
+			proxPosicao += itens[i].getLetrasDescobertas().length;
 		}
 		
-		System.arraycopy(letrasErradas.toArray(), 0, tentativas, proxPosicao, letrasErradas.toArray().length);
-		return tentativas;
-		
+		return certas; 
 	}
+	public Letra[] getErradas() {
+		return (Letra[]) this.letrasErradas.toArray();
+	}
+	
+	public int calcularPontos() {
+		 int pontos = 0;
+		 
+		 if(this.descobriu()==true) {
+			 pontos = getPontosQuandoDescobreTodasAsPalavras();
+		 
+		 
+			 for(int i = 0; i < getMaxPalavras(); i++) {
+				 pontos += this.itens[i].calcularPontosLetrasEncobertas(getPontosPorLetraEncoberta());
+			 }		 
+		 }
+		 
+		return pontos;
+	}
+	
+	public boolean encerrou() {
+		if(this.arriscou()==true||this.descobriu==true||this.atingiuMaxErros()==true) {
+			return true;
+		}
+		return false;
+	}
+	
+	public boolean descobriu() {
+		
+		for(int i = 0; i < getMaxPalavras(); i++) {
+			if(this.itens[i].descobriu()==false) {
+				return false;
+			}
+		}	
+		
+		return true;
+	}
+	
+	public boolean arriscou() {
+			
+		for(int i = 0; i < getMaxPalavras(); i++) {
+			if(this.itens[i].arriscou()==true) {
+				return true;
+			}
+		}	
+		
+		return false;
+	}
+	
+	public int getQtdeTentativasRestantes() {
+		return getMaxErros() - this.getQtdeTentativas(); 
+	}
+	
+	public int getQtdeErros() {
+		return this.getErradas().length;
+	}
+	
+	public int getQtdeAcertos() {
+		return this.getCertas().length;
+	}
+	
+	public int getQtdeTentativas () {
+		return this.getQtdeAcertos()+this.getQtdeErros();
+	}
+	
+	//falta fazer tratamentos
+	
+	
 }
