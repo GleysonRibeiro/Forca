@@ -12,6 +12,7 @@ public class Palavra extends ObjetoDominioImpl {
 	private static LetraFactory letraFactory;
 	private List<Letra> letras;
 	private Tema tema;
+	private Letra encoberta;
 	
 	public static void setLetraFactory(LetraFactory factory) {
 		letraFactory = factory;		
@@ -23,7 +24,7 @@ public class Palavra extends ObjetoDominioImpl {
 	
 	private Palavra(long id, String palavra, Tema tema) {
 		if(letraFactory == null) {
-			throw new RuntimeException("letraFacotry não pode ser null");
+			throw new RuntimeException("letraFactory não pode ser null");
 		} 
 		
 		this.ObjetoDominio(id);
@@ -55,7 +56,7 @@ public class Palavra extends ObjetoDominioImpl {
 		return letras.get(posicao);
 	}
 	
-	//O que é o objeto Object em + exibir(contexto : Object, posicoes : boolean[]) : void = imprimir todas as letras de palavra
+	
 	public void exibir(Object contexto) {
 		for(int i = 0; i < this.letras.size();i++) {
 			letras.get(i).exibir(contexto);
@@ -108,7 +109,7 @@ public class Palavra extends ObjetoDominioImpl {
 	
 	public String toString() {
 		
-		String palavra = null;
+		String palavra = "";
 		
 		for(int i=0;i<this.getTamanho();i++) {
 			palavra+=this.getLetra(i);

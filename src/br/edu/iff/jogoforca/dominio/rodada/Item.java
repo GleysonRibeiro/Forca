@@ -11,14 +11,16 @@ public class Item extends ObjetoDominioImpl{
     private Palavra palavra;
     
 
-    private Item (int id, Palavra palavra){ 
+    private Item (int id, Palavra palavra){
+    	ObjetoDominio(id);
         this.palavra = palavra;
     }
 
     private Item (int id, Palavra palavra, int[] posicoesDescobertas, String palavraArriscada){
+    	ObjetoDominio(id);
     	this.palavra = palavra;
     	for(int i = 0; i < posicoesDescobertas.length;i++) {
-    		if(posicoesDescobertas[i]==1) { //verificar se o vetor vem com 0 ou 1
+    		if(posicoesDescobertas[i]==1) { 
     			this.posicoesDescobertas[i]=true;    			
     		}
     		else {
@@ -36,8 +38,10 @@ public class Item extends ObjetoDominioImpl{
     	return item;
     }
     
-    public Item reconstituir(int id, Palavra palavra, int posicoesDescoberta[], String palavraArriscada) {
-    	//Verificar como recuperar sem repositorio
+    public Item reconstituir(int id, Palavra palavra, int posicoesDescobertas[], String palavraArriscada) {
+    	Item item = new Item(id, palavra, posicoesDescobertas, palavraArriscada);
+    	
+    	return item;
     }   
     
 
@@ -46,7 +50,8 @@ public class Item extends ObjetoDominioImpl{
     }
     
     public Letra[] getLetrasDescobertas() {
-    	Letra[] letrasDescobertas = null;
+    	int tamanho = this.palavra.getTamanho() - this.qtdeLetrasEncobertas();
+    	Letra[] letrasDescobertas = new Letra[tamanho];
     	
     	for(int i = 0;i<this.palavra.getTamanho();i++) {
     		if(this.posicoesDescobertas[i]==true) {
@@ -57,7 +62,7 @@ public class Item extends ObjetoDominioImpl{
     }
     
     public Letra[] getLetrasEncobertas() {
-    	Letra [] letrasEncobertas = null;
+    	Letra [] letrasEncobertas = new Letra[this.qtdeLetrasEncobertas()];
     	for(int i = 0;i<this.palavra.getTamanho();i++) {
     		if(this.posicoesDescobertas[i]==false) {
     			letrasEncobertas[i]=this.palavra.getLetra(i);
@@ -99,9 +104,8 @@ public class Item extends ObjetoDominioImpl{
     
     boolean tentar(char codigo) {
     	
-    	int[] posicoes;
+    	int[] posicoes = this.palavra.tentar(codigo);
     	int cont = 0;
-    	posicoes = this.palavra.tentar(codigo);
     	for(int i = 0; i < this.palavra.getTamanho();i++) {
     		if(posicoes[i]==1) {
     			this.posicoesDescobertas[i]=true;

@@ -1,24 +1,28 @@
 package br.edu.iff.jogoforca.dominio.rodada;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import br.edu.iff.bancodepalavras.dominio.letra.Letra;
 import br.edu.iff.bancodepalavras.dominio.palavra.Palavra;
 import br.edu.iff.bancodepalavras.dominio.tema.Tema;
 import br.edu.iff.dominio.ObjetoDominioImpl;
+import br.edu.iff.jogoforca.dominio.boneco.Boneco;
+import br.edu.iff.jogoforca.dominio.boneco.BonecoFactory;
+import br.edu.iff.jogoforca.dominio.jogador.Jogador;
 
 public class Rodada extends ObjetoDominioImpl {
 	
-	private static final int maxPalavras = 3;
-	private static final int maxErros = 10;
-	private static final int pontosQuandoDescobreTodasAsPalavras = 100;
-	private static final int pontosPorLetraEncoberta = 15;
+	private static int maxPalavras = 3;
+	private static int maxErros = 10;
+	private static int pontosQuandoDescobreTodasAsPalavras = 100;
+	private static int pontosPorLetraEncoberta = 15;
 	private BonecoFactory bonecoFactory;
 	private Item[] itens;
 	private Jogador jogador;
 	private List<Letra> letrasErradas = null;
-	
-	RodadaRepository repo;
+	private Boneco boneco;
 	
 	
 	public static int getMaxPalavras() {
@@ -33,7 +37,7 @@ public class Rodada extends ObjetoDominioImpl {
 		return maxErros;
 	}
 	
-	public static void getMaxErros (int max) {
+	public static void setMaxErros (int max) {
 		maxErros = max;
 	}
 	
@@ -67,15 +71,33 @@ public class Rodada extends ObjetoDominioImpl {
 	}
 	
 	public Rodada reconstituir(long id, Item[] itens, Letra[] erradas, Jogador jogador) {
-		Rodada rodadaRecuperada = repo.getPorId(id);
+		Rodada reconstituida = new Rodada(id, itens, erradas, jogador);
+		return reconstituida;
 	}
 	
 	private Rodada(long id, Palavra[] palavras, Jogador jogador) {
-		super(id);
+		if(this.bonecoFactory==null) {
+			throw new RuntimeException("bonecoFactory não pode estar vazio");
+		}
+		ObjetoDominio(id);
 		for(int i = 0; i < palavras.length;i++) {
 			this.itens[i].criar(i, palavras[i]);
 		}
+		this.boneco = this.bonecoFactory.getBoneco();		
 		this.jogador = jogador;
+		
+	}
+	
+	private Rodada(long id, Item[] itens, Letra[] erradas, Jogador jogador) {
+		if(this.bonecoFactory==null) {
+			throw new RuntimeException("bonecoFactory não pode estar vazio");
+		}
+		ObjetoDominio(id);
+		this.itens = itens;
+		this.letrasErradas = new ArrayList<>(Arrays.asList(erradas));
+		this.jogador = jogador;
+		this.boneco = this.bonecoFactory.getBoneco();
+		
 	}
 	
 	public Jogador getJogador() {
@@ -87,8 +109,8 @@ public class Rodada extends ObjetoDominioImpl {
 	}
 	
 	public Palavra[] getPalavras() {
-		Palavra[] palavras = null;
-		for(int i = 0; i<itens.length;i++) {
+		Palavra[] palavras = new Palavra[this.getNumPalavras()];
+		for(int i = 0; i<this.getNumPalavras();i++) {
 			palavras[i] = itens[i].getPalavra();			
 		}
 		
@@ -108,33 +130,49 @@ public class Rodada extends ObjetoDominioImpl {
 	
 	public void tentar(char codigo) {
 		
+		if(this.encerrou()==true) {
+			throw new RuntimeException("Rodada já encerrou");
+		}
+		
 		for(int i = 0; i<this.getNumPalavras();i++) {
 			if(this.itens[i].tentar(codigo)==false) {
 				letrasErradas.add(itens[i].getPalavra().getLetraFactory().getLetra(codigo));				
 			}
 		}
+		if(this.encerrou()==true) {
+			this.jogador.setPontuacao(this.calcularPontos());
+		}
 		
 	}
 	
 	public void arriscar(String[] palavras) {
+		if(this.arriscou()==true) {
+			throw new RuntimeException("Jogador já arriscou");
+		}
+		if(this.encerrou()==true) {
+			throw new RuntimeException("Rodada já encerrou");
+		}
 		for(int i = 0; i<palavras.length;i++) {
 			itens[i].arriscar(palavras[i]);
+		}
+		if(this.encerrou()==true) {
+			this.jogador.setPontuacao(this.calcularPontos());
 		}
 	}
 	
 	public void exibirItens(Object contexto) {
-		for(int i = 0; i < getMaxPalavras();i++) {
+		for(int i = 0; i < this.getNumPalavras();i++) {
 			itens[i].exibir(contexto);
 		}
 	}
 	
 	public void exibirBoneco(Object contexto) {
-		this.bonecoFactory.getBoneco().exibir(contexto, this.getQtdeErros());
+		this.boneco.exibir(contexto, this.getQtdeErros());
 		
 	}
 	
 	public void exibirPalavras(Object contexto) {
-		for(int i = 0; i < getMaxPalavras(); i++) {
+		for(int i = 0; i < this.getNumPalavras(); i++) {
 			itens[i].getPalavra().exibir(contexto);
 		}
 	}
@@ -151,8 +189,8 @@ public class Rodada extends ObjetoDominioImpl {
 		
 		Letra[] tentativas = new Letra[tamanhoTotal];		
 		
-		System.arraycopy(this.getCertas(), 0, tentativas, 0 , this.getQtdeCertas());
-		System.arraycopy(letrasErradas.toArray(), 0, tentativas, this.getQtdeCertas(), this.getQtdeErros);
+		System.arraycopy(this.getCertas(), 0, tentativas, 0 , this.getQtdeAcertos());
+		System.arraycopy(letrasErradas.toArray(), 0, tentativas, this.getQtdeAcertos(), this.getQtdeErros());
 		
 		return tentativas;
 		
@@ -162,7 +200,7 @@ public class Rodada extends ObjetoDominioImpl {
 		int tamanhoTotal = this.getQtdeAcertos();
 		Letra[] certas = new Letra[tamanhoTotal];
 		int i;
-		int proxPosicao;
+		int proxPosicao = 0;
 
 		for(i = 0; i < getMaxPalavras(); i++) {
 			if(i==0) {
@@ -194,7 +232,7 @@ public class Rodada extends ObjetoDominioImpl {
 	}
 	
 	public boolean encerrou() {
-		if(this.arriscou()==true||this.descobriu==true||this.atingiuMaxErros()==true) {
+		if(this.arriscou()==true||this.descobriu()==true||this.atingiuMaxErros()==true) {
 			return true;
 		}
 		return false;
@@ -202,7 +240,7 @@ public class Rodada extends ObjetoDominioImpl {
 	
 	public boolean descobriu() {
 		
-		for(int i = 0; i < getMaxPalavras(); i++) {
+		for(int i = 0; i < this.getNumPalavras(); i++) {
 			if(this.itens[i].descobriu()==false) {
 				return false;
 			}
@@ -213,7 +251,7 @@ public class Rodada extends ObjetoDominioImpl {
 	
 	public boolean arriscou() {
 			
-		for(int i = 0; i < getMaxPalavras(); i++) {
+		for(int i = 0; i < this.getNumPalavras(); i++) {
 			if(this.itens[i].arriscou()==true) {
 				return true;
 			}
@@ -238,7 +276,14 @@ public class Rodada extends ObjetoDominioImpl {
 		return this.getQtdeAcertos()+this.getQtdeErros();
 	}
 	
-	//falta fazer tratamentos
+	public boolean atingiuMaxErros() {
+		if(this.getQtdeTentativasRestantes()==0) {
+			return true;
+		}
+		return false;
+	}
+	
+	
 	
 	
 }
