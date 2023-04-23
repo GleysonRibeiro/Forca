@@ -6,12 +6,12 @@ public class Jogador extends ObjetoDominioImpl{
 	private String nome;
 	private int pontuacao = 0;
 	
-	public Jogador criar(long id, String nome) {
+	public static Jogador criar(long id, String nome) {
 		Jogador novoJogador = new Jogador(id, nome);
 		return novoJogador;
 	}
 	
-	public Jogador reconstituir(long id, String nome, int pontuacao) {
+	public static Jogador reconstituir(long id, String nome, int pontuacao) {
 		Jogador jogadorReconstituido = new Jogador (id, nome, pontuacao);
 		return jogadorReconstituido;
 	}
