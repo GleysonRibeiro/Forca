@@ -3,7 +3,6 @@ package br.edu.iff.bancodepalavras.dominio.tema.emmemoria;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.edu.iff.bancodepalavras.dominio.palavra.emmemoria.MemoriaPalavraRepository;
 import br.edu.iff.bancodepalavras.dominio.tema.Tema;
 import br.edu.iff.bancodepalavras.dominio.tema.TemaRepository;
 import br.edu.iff.repository.RepositoryException;

@@ -3,7 +3,6 @@ package br.edu.iff.jogoforca.dominio.jogador.emmemoria;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.edu.iff.bancodepalavras.dominio.palavra.emmemoria.MemoriaPalavraRepository;
 import br.edu.iff.jogoforca.dominio.jogador.Jogador;
 import br.edu.iff.jogoforca.dominio.jogador.JogadorRepository;
 import br.edu.iff.repository.RepositoryException;
