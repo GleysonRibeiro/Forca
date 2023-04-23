@@ -6,7 +6,7 @@ public class Tema extends ObjetoDominioImpl {
 	
 	private String nome;
 	
-	TemaRepository repo;
+	private static TemaRepository repo;
 	
 	private Tema(long id, String nome) {		
 		ObjetoDominio(id);

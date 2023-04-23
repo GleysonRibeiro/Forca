@@ -13,6 +13,7 @@ public class Palavra extends ObjetoDominioImpl {
 	private List<Letra> letras;
 	private Tema tema;
 	private Letra encoberta;
+	private static PalavraRepository repo;
 	
 	public static void setLetraFactory(LetraFactory factory) {
 		letraFactory = factory;		
@@ -44,7 +45,7 @@ public class Palavra extends ObjetoDominioImpl {
 	}
 	
 	public static Palavra reconstituir(long id, String palavra, Tema tema) {
-		Palavra palavraReconstituida = palavraRepository.getPorId(id);
+		Palavra palavraReconstituida = repo.getPorId(id);
 		return palavraReconstituida;
 	}
 	
