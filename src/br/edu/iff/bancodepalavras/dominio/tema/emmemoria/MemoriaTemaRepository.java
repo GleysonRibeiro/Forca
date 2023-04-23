@@ -3,21 +3,24 @@ package br.edu.iff.bancodepalavras.dominio.tema.emmemoria;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.edu.iff.bancodepalavras.dominio.palavra.emmemoria.MemoriaPalavraRepository;
 import br.edu.iff.bancodepalavras.dominio.tema.Tema;
 import br.edu.iff.bancodepalavras.dominio.tema.TemaRepository;
 import br.edu.iff.repository.RepositoryException;
 
 public class MemoriaTemaRepository implements TemaRepository{
 	
-	private MemoriaTemaRepository soleInstance = null;
+	private static MemoriaTemaRepository soleInstance = null;
 	private List<Tema> pool;
 	
-	public MemoriaTemaRepository getSoleInstance() {
-		return this.soleInstance; 
+	public static MemoriaTemaRepository getSoleInstance() {
+		if (soleInstance == null) {
+	        soleInstance = new MemoriaTemaRepository();
+	    }
+		return soleInstance; 
 	}
 	
 	private MemoriaTemaRepository() {
-		this.soleInstance =  null;
 		this.pool = new ArrayList<Tema>();		
 	}
 
@@ -28,6 +31,9 @@ public class MemoriaTemaRepository implements TemaRepository{
 
 	@Override
 	public Tema getPorId(long id) {
+		if (pool.isEmpty()) {
+	        throw new RuntimeException("O pool está vazio");
+	    }
 		for(Tema tema:pool) {
 			if(tema.getId()==id) {
 				return tema;
@@ -39,6 +45,9 @@ public class MemoriaTemaRepository implements TemaRepository{
 
 	@Override
 	public Tema[] getPorNome(String nome) {
+		if (pool.isEmpty()) {
+	        throw new RuntimeException("O pool está vazio");
+	    }
 		
 		int tamanho = 0;		
 		for(Tema tema:pool) {
@@ -63,17 +72,32 @@ public class MemoriaTemaRepository implements TemaRepository{
 
 	@Override
 	public Tema[] getTodos() {
+		if (pool.isEmpty()) {
+	        throw new RuntimeException("O pool está vazio");
+	    }
 		return this.pool.toArray(new Tema[this.pool.size()]);
 	}
 
 	@Override
 	public void inserir(Tema tema) throws RepositoryException {
+		if(tema==null) {
+			throw new RuntimeException("O tema não pode estar vazio");
+		}		
+		if(pool.contains(tema)==true) {
+			throw new RepositoryException();
+		}
 		this.pool.add(tema);
 		
 	}
 
 	@Override
 	public void atualizar(Tema tema) throws RepositoryException {
+		if(tema==null) {
+			throw new RuntimeException("O tema não pode estar vazio");
+		}
+		if(pool.contains(tema)==false) {
+			throw new RepositoryException();
+		}
 		for(Tema temaAtual:pool) {
 			if(temaAtual.getId() == tema.getId()) {
 				this.remover(temaAtual);
@@ -85,6 +109,12 @@ public class MemoriaTemaRepository implements TemaRepository{
 
 	@Override
 	public void remover(Tema tema) throws RepositoryException {
+		if(tema==null) {
+			throw new RuntimeException("O tema não pode estar vazio");
+		}		
+		if(pool.contains(tema)==false) {
+			throw new RepositoryException();
+		}
 		this.pool.remove(tema);
 		
 	}

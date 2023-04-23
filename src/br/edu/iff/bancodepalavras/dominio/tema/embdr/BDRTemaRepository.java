@@ -6,10 +6,10 @@ import br.edu.iff.repository.RepositoryException;
 
 public class BDRTemaRepository implements TemaRepository {
 
-	private BDRTemaRepository soleInstance = null;
+	private static BDRTemaRepository soleInstance = null;
 	
-	public BDRTemaRepository getSoleInstance() {
-		return this.soleInstance;
+	public static BDRTemaRepository getSoleInstance() {
+		return soleInstance;
 	}
 	
 	private BDRTemaRepository() {

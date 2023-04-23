@@ -3,7 +3,7 @@ package br.edu.iff.jogoforca.dominio.rodada.emmemoria;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.edu.iff.bancodepalavras.dominio.tema.Tema;
+import br.edu.iff.bancodepalavras.dominio.palavra.emmemoria.MemoriaPalavraRepository;
 import br.edu.iff.jogoforca.dominio.jogador.Jogador;
 import br.edu.iff.jogoforca.dominio.rodada.Rodada;
 import br.edu.iff.jogoforca.dominio.rodada.RodadaRepository;
@@ -14,11 +14,13 @@ public class MemoriaRodadaRepository implements RodadaRepository {
 	private static MemoriaRodadaRepository soleInstance = null;
 	private List<Rodada> pool;
 	public static MemoriaRodadaRepository getSoleInstance() {
+		if (soleInstance == null) {
+	        soleInstance = new MemoriaRodadaRepository();
+	    }
 		return soleInstance;
 	}
 	
 	private MemoriaRodadaRepository() {
-		soleInstance = null;
 		this.pool = new ArrayList<>();		
 	}
 	
@@ -29,6 +31,9 @@ public class MemoriaRodadaRepository implements RodadaRepository {
 
 	@Override
 	public Rodada getPorId(long id) {
+		if (pool.isEmpty()) {
+	        throw new RuntimeException("O pool está vazio");
+	    }
 		for(Rodada rodada:pool) {
 			if(rodada.getId()==id) {
 				return rodada;
@@ -40,6 +45,9 @@ public class MemoriaRodadaRepository implements RodadaRepository {
 
 	@Override
 	public Rodada[] getPorJogador(Jogador jogador) {
+		if (pool.isEmpty()) {
+	        throw new RuntimeException("O pool está vazio");
+	    }
 		int tamanho = 0;
 		for(Rodada rodada:pool) {
 			if(rodada.getJogador().getId()==jogador.getId()) {
@@ -62,12 +70,24 @@ public class MemoriaRodadaRepository implements RodadaRepository {
 
 	@Override
 	public void inserir(Rodada rodada) throws RepositoryException {
+		if(rodada==null) {
+			throw new RuntimeException("A rodada não pode estar vazia");
+		}		
+		if(pool.contains(rodada)==true) {
+			throw new RepositoryException();
+		}
 		pool.add(rodada);
 		
 	}
 
 	@Override
 	public void atualizar(Rodada rodada) throws RepositoryException {
+		if(rodada==null) {
+			throw new RuntimeException("A rodada não pode estar vazia");
+		}
+		if(pool.contains(rodada)==false) {
+			throw new RepositoryException();
+		}
 		for(Rodada rodadaAtual:pool) {
 			if(rodadaAtual.getId() == rodada.getId()) {
 				this.remover(rodadaAtual);
@@ -79,6 +99,12 @@ public class MemoriaRodadaRepository implements RodadaRepository {
 
 	@Override
 	public void remover(Rodada rodada) throws RepositoryException {
+		if(rodada==null) {
+			throw new RuntimeException("A rodada não pode estar vazia");
+		}		
+		if(pool.contains(rodada)==false) {
+			throw new RepositoryException();
+		}
 		pool.remove(rodada);
 		
 	}

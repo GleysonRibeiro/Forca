@@ -11,10 +11,10 @@ public class BDRPalavraRepository implements PalavraRepository {
 		
 	}
 	
-	private BDRPalavraRepository soleInstance = null;
+	private static BDRPalavraRepository soleInstance = null;
 	
-	public BDRPalavraRepository getSoleInstance() {
-		return this.soleInstance;
+	public static BDRPalavraRepository getSoleInstance() {
+		return soleInstance;
 	}
 
 	@Override

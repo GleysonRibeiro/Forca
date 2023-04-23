@@ -10,17 +10,19 @@ import br.edu.iff.repository.RepositoryException;
 
 public class MemoriaPalavraRepository implements PalavraRepository{
 	
-	private MemoriaPalavraRepository soleInstance = null;
+	private static MemoriaPalavraRepository soleInstance = null;
 	private List<Palavra> pool;
 	
 	private MemoriaPalavraRepository() {
-		this.soleInstance = null;
 		this.pool = new ArrayList<Palavra>();
 		
 	}
 	
-	public MemoriaPalavraRepository getSoleInstance() {
-		return this.soleInstance;
+	public static MemoriaPalavraRepository getSoleInstance() {
+		if (soleInstance == null) {
+	        soleInstance = new MemoriaPalavraRepository();
+	    }
+	    return soleInstance;
 	}
 
 	@Override
@@ -31,6 +33,9 @@ public class MemoriaPalavraRepository implements PalavraRepository{
 
 	@Override
 	public Palavra getPorId(long id) {
+		if (pool.isEmpty()) {
+	        throw new RuntimeException("O pool está vazio");
+	    }
 		
 		for(Palavra palavra:pool) {
 			if(palavra.getId()==id) {
@@ -43,6 +48,9 @@ public class MemoriaPalavraRepository implements PalavraRepository{
 
 	@Override
 	public Palavra[] getPorTema(Tema tema) {
+		if (pool.isEmpty()) {
+	        throw new RuntimeException("O pool está vazio");
+	    }
 		int tamanho = 0;
 		for(Palavra palavra:pool) {
 			if(palavra.getTema()==tema) {
@@ -66,13 +74,17 @@ public class MemoriaPalavraRepository implements PalavraRepository{
 	
 	@Override
 	public Palavra[] getTodas() {
-		
+		if (pool.isEmpty()) {
+	        throw new RuntimeException("O pool está vazio");
+	    }
 		return this.pool.toArray(new Palavra[this.pool.size()]);
 	}
 
 	@Override
 	public Palavra getPalavra(String palavra) {
-		
+		if (pool.isEmpty()) {
+	        throw new RuntimeException("O pool está vazio");
+	    }
 		for(Palavra palavraAtual:pool) {
 			if(palavraAtual.comparar(palavra)==true) {
 				return palavraAtual;
@@ -84,12 +96,24 @@ public class MemoriaPalavraRepository implements PalavraRepository{
 
 	@Override
 	public void inserir(Palavra palavra) throws RepositoryException {
+		if(palavra==null) {
+			throw new RuntimeException("A palavra não pode estar vazia");
+		}		
+		if(pool.contains(palavra)==true) {
+			throw new RepositoryException();
+		}
 		this.pool.add(palavra);
 		
 	}
 
 	@Override
 	public void atualizar(Palavra palavra) throws RepositoryException {
+		if(palavra==null) {
+			throw new RuntimeException("A palavra não pode estar vazia");
+		}
+		if(pool.contains(palavra)==false) {
+			throw new RepositoryException();
+		}
 		for(Palavra palavraAtual:pool) {
 			if(palavraAtual.getId() == palavra.getId()) {
 				this.remover(palavraAtual);
@@ -101,6 +125,12 @@ public class MemoriaPalavraRepository implements PalavraRepository{
 
 	@Override
 	public void remover(Palavra palavra) throws RepositoryException {
+		if(palavra==null) {
+			throw new RuntimeException("A palavra não pode estar vazia");
+		}		
+		if(pool.contains(palavra)==false) {
+			throw new RepositoryException();
+		}
 		this.pool.remove(palavra);
 		
 	}
