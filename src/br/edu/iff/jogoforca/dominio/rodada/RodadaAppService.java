@@ -16,7 +16,7 @@ public class RodadaAppService {
 		
 	}
 	
-	public RodadaAppService getSoleInstance() {
+	public static RodadaAppService getSoleInstance() {
 		return soleInstance;
 	}
 	

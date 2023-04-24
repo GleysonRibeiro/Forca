@@ -29,6 +29,10 @@ public class Aplicacao {
 	private String tipoRodadaFactory = TIPOS_RODADA_FACTORY[0];
 	
 	public static Aplicacao getSoleInstance() {
+		if(soleInstance!=null) {
+			return soleInstance;
+		}
+		soleInstance = new Aplicacao();
 		return soleInstance;
 	}
 	
