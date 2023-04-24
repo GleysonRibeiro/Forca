@@ -4,10 +4,10 @@ import br.edu.iff.jogoforca.dominio.boneco.Boneco;
 
 public class BonecoTexto implements Boneco {
 	
-	private BonecoTexto soleInstance;
+	private static BonecoTexto soleInstance;
 	
-	public BonecoTexto getSoleInstance() {
-		return this.soleInstance;
+	public static BonecoTexto getSoleInstance() {
+		return soleInstance;
 	}
 	
 	private BonecoTexto() {

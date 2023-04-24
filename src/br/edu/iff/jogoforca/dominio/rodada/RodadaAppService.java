@@ -35,9 +35,10 @@ public class RodadaAppService {
 		}
 		Rodada novaRodada = this.factory.getRodada(jogador);
 		this.salvarRodada(novaRodada);
+		return novaRodada;
 	}
 	
-	public Rodada novaRodada(String nomeJogador) {
+	public Rodada novaRodada(String nomeJogador) throws JogadorNaoEncontradoException {
 		Jogador jogador;
 		try {
 			jogador = this.jogadorRepository.getPorNome(nomeJogador);
@@ -46,6 +47,7 @@ public class RodadaAppService {
 		}
 		Rodada novaRodada = this.factory.getRodada(jogador);
 		this.salvarRodada(novaRodada);
+		return novaRodada;
 	}
 	
 	public Rodada novaRodada(Jogador jogador) {
@@ -54,6 +56,7 @@ public class RodadaAppService {
 		}
 		Rodada novaRodada = this.factory.getRodada(jogador);
 		this.salvarRodada(novaRodada);
+		return novaRodada;
 	}
 	
 	public boolean salvarRodada(Rodada rodada) {

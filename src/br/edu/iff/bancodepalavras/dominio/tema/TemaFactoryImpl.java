@@ -1,7 +1,6 @@
 package br.edu.iff.bancodepalavras.dominio.tema;
 
 import br.edu.iff.factory.EntityFactory;
-import br.edu.iff.repository.Repository;
 import br.edu.iff.repository.RepositoryException;
 
 public class TemaFactoryImpl extends EntityFactory implements TemaFactory {
@@ -31,19 +30,19 @@ public class TemaFactoryImpl extends EntityFactory implements TemaFactory {
 
     @Override
     public Tema getTema(String nome) {
-        Tema temaTemp = Tema.criar(getProximoId(), nome);
+        Tema temporario = Tema.criar(getProximoId(), nome);
 
         if (getTemaRepository() == null) { // Primeiro verificar se o repositório de Temas é nulo, se sim já retorna uma excessão, já que não vai dar pra salvar o tema.
             throw new RuntimeException("Não foi possível acessar o repositório de temas.");
         }
 
         try {
-            getTemaRepository().inserir(temaTemp); //Se não for nulo, tenta inserir tema no Repositório
+            getTemaRepository().inserir(temporario); //Se não for nulo, tenta inserir tema no Repositório
         } catch (RepositoryException e) {
             throw new RuntimeException("Não foi possível salvar o tema.");
         }
 
-        return temaTemp;
+        return temporario;
     }
 
 }

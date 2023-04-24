@@ -10,7 +10,7 @@ public class PalavraAppService {
 	
 	public PalavraRepository palavraRepository = null;
 	public TemaRepository temaRepository = null;
-	public PalavraFactory palavraFactory = null;
+	public PalavraFactory factory = null;
 	
 	public static void createSoleInstance(TemaRepository temaRepository, PalavraRepository palavraRepository, PalavraFactory palavraFactory) {
 		if(soleInstance!=null) {
@@ -26,7 +26,7 @@ public class PalavraAppService {
 	private PalavraAppService(TemaRepository temaRepository, PalavraRepository palavraRepository, PalavraFactory factory) {
 		this.palavraRepository = palavraRepository;
 		this.temaRepository = temaRepository;
-		this.palavraFactory = factory;
+		this.factory = factory;
 	}
 	
 	public boolean novaPalavra (String palavra, long idTema) {

@@ -18,6 +18,6 @@ public class BonecoImagemFactory implements BonecoFactory {
 
     @Override
     public Boneco getBoneco(){
-        return BonecoImagem.getSoleInstance();
+        return BonecoImagem.getBoneco();
     }
 }

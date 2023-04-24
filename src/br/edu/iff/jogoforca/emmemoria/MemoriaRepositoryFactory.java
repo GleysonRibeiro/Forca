@@ -15,11 +15,17 @@ public class MemoriaRepositoryFactory implements RepositoryFactory  {
 	private static MemoriaRepositoryFactory soleInstance = null;
 	
 	public static MemoriaRepositoryFactory getSoleInstance() {
-		return soleInstance;
+		
+		if(soleInstance==null) {
+			return new MemoriaRepositoryFactory();			
+		}else {
+			return soleInstance;
+		}
+		
 	}
 	
 	private MemoriaRepositoryFactory() {
-		soleInstance = null;
+		
 	}
 
 	@Override

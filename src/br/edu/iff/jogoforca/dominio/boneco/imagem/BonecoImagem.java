@@ -4,10 +4,10 @@ import br.edu.iff.jogoforca.dominio.boneco.Boneco;
 
 
 public class BonecoImagem implements Boneco{
-private BonecoImagem soleInstance;
+private static BonecoImagem soleInstance;
 	
 	public BonecoImagem getSoleInstance() {
-		return this.soleInstance;
+		return soleInstance;
 	}
 	
 	private BonecoImagem() {
@@ -16,6 +16,11 @@ private BonecoImagem soleInstance;
 	@Override
 	public void exibir(Object contexto, int partes) {
 		
+	}
+
+	public static Boneco getBoneco() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

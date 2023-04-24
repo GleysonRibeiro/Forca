@@ -10,6 +10,10 @@ public class ElementoGraficoTextoFactory implements ElementoGraficoFactory  {
     private static ElementoGraficoTextoFactory soleInstance = null;
 
     private ElementoGraficoTextoFactory(){}
+    
+    private BonecoTextoFactory bonecoTextoFactory;
+    private LetraTextoFactory letraTextoFactory;
+    
 
     public static ElementoGraficoTextoFactory getSoleInstance(){
         if (soleInstance == null){
@@ -19,17 +23,17 @@ public class ElementoGraficoTextoFactory implements ElementoGraficoFactory  {
     }
 
     public Boneco getBoneco(){
-        return BonecoTextoFactory.getSoleInstance();
+        return bonecoTextoFactory.getBoneco();
     }
 
     @Override
     public Letra getLetra(char codigo) {
-        return LetraTextoFactory.getLetra(codigo);
+        return letraTextoFactory.getLetra(codigo);
     }
 
     @Override
     public Letra getLetraEncoberta() {
-        return LetraTextoFactory.getLetraEncoberta();
+        return letraTextoFactory.getLetraEncoberta();
     }
 
     @Override

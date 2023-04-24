@@ -16,7 +16,6 @@ public class BonecoTextoFactory implements BonecoFactory{
         return soleInstance;
     }
 
-    @Override
     public Boneco getBoneco(){
         return BonecoTexto.getSoleInstance();
     }

@@ -5,6 +5,14 @@ import br.edu.iff.bancodepalavras.dominio.letra.LetraFactoryImpl;
 
 public class LetraImagemFactory extends LetraFactoryImpl {
     private static LetraImagemFactory soleInstance = null;
+    
+    public static LetraImagemFactory getSoleInstance() {
+    	if(soleInstance!=null) {
+    		return soleInstance;
+    	}
+    	LetraImagemFactory factory = new LetraImagemFactory();
+    	return factory;
+    }
 
     private LetraImagemFactory(){}
 
