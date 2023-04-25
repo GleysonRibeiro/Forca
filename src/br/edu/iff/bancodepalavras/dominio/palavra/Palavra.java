@@ -1,5 +1,6 @@
 package br.edu.iff.bancodepalavras.dominio.palavra;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import br.edu.iff.bancodepalavras.dominio.letra.Letra;
@@ -10,7 +11,7 @@ import br.edu.iff.dominio.ObjetoDominioImpl;
 public class Palavra extends ObjetoDominioImpl {
 	
 	private static LetraFactory letraFactory;
-	private List<Letra> letras;
+	private List<Letra> letras = new ArrayList<Letra>();
 	private Tema tema;
 	private Letra encoberta;
 	private static PalavraRepository repo;

@@ -30,6 +30,7 @@ public class PalavraFactoryImpl extends EntityFactory implements PalavraFactory 
 
     @Override
     public Palavra getPalavra(String palavra, Tema tema) {
+    	
         Palavra temporaria = Palavra.criar(getProximoId(),palavra, tema);
 
         if (getPalavraRepository() == null) {

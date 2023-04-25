@@ -7,6 +7,9 @@ public class BonecoTexto implements Boneco {
 	private static BonecoTexto soleInstance;
 	
 	public static BonecoTexto getSoleInstance() {
+		if (soleInstance == null){
+			soleInstance = new BonecoTexto();
+		}
 		return soleInstance;
 	}
 	
@@ -15,7 +18,10 @@ public class BonecoTexto implements Boneco {
 	
 	@Override
 	public void exibir(Object contexto, int partes) {
-		if (partes == 1) {
+		if(partes == 0) {
+			System.out.println("Sem erros!");
+		}
+		else if (partes == 1) {
 		    System.out.println("cabeça");
 		} else if (partes == 2) {
 		    System.out.println("cabeça, olho esquerdo");

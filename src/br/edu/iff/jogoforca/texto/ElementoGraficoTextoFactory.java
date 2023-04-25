@@ -9,7 +9,10 @@ public class ElementoGraficoTextoFactory implements ElementoGraficoFactory  {
     
     private static ElementoGraficoTextoFactory soleInstance = null;
 
-    private ElementoGraficoTextoFactory(){}
+    private ElementoGraficoTextoFactory(){
+    	this.bonecoTextoFactory = BonecoTextoFactory.getSoleInstance();
+    	this.letraTextoFactory = LetraTextoFactory.getSoleInstance();
+    }
     
     private BonecoTextoFactory bonecoTextoFactory;
     private LetraTextoFactory letraTextoFactory;

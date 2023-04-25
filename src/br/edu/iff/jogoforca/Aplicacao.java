@@ -2,6 +2,7 @@ package br.edu.iff.jogoforca;
 
 import br.edu.iff.bancodepalavras.dominio.letra.LetraFactory;
 import br.edu.iff.bancodepalavras.dominio.letra.texto.LetraTextoFactory;
+import br.edu.iff.bancodepalavras.dominio.palavra.Palavra;
 import br.edu.iff.bancodepalavras.dominio.palavra.PalavraAppService;
 import br.edu.iff.bancodepalavras.dominio.palavra.PalavraFactory;
 import br.edu.iff.bancodepalavras.dominio.palavra.PalavraFactoryImpl;
@@ -13,6 +14,7 @@ import br.edu.iff.jogoforca.dominio.boneco.BonecoFactory;
 import br.edu.iff.jogoforca.dominio.jogador.JogadorFactory;
 import br.edu.iff.jogoforca.dominio.jogador.JogadorFactoryImpl;
 import br.edu.iff.jogoforca.dominio.jogador.JogadorRepository;
+import br.edu.iff.jogoforca.dominio.rodada.Rodada;
 import br.edu.iff.jogoforca.dominio.rodada.RodadaAppService;
 import br.edu.iff.jogoforca.dominio.rodada.RodadaFactory;
 import br.edu.iff.jogoforca.dominio.rodada.sorteio.RodadaSorteioFactory;
@@ -47,12 +49,13 @@ public class Aplicacao {
 		RodadaSorteioFactory.createSoleInstance(this.getRepositoryFactory().getRodadaRepository(), this.getRepositoryFactory().getTemaRepository(), this.getRepositoryFactory().getPalavraRepository());
 		PalavraAppService.createSoleInstance(this.getRepositoryFactory().getTemaRepository(), this.getRepositoryFactory().getPalavraRepository(), getPalavraFactory());
 		RodadaAppService.createSoleInstance(this.getRodadaFactory(), this.getRepositoryFactory().getRodadaRepository(), this.getRepositoryFactory().getJogadorRepository());
-		
+		Palavra.setLetraFactory(this.getLetraFactory());
+		Rodada.setBonecoFactory(this.getBonecoFactory());
 		
 		this.getRepositoryFactory();
 		this.getElementoGraficoFactory();
 		this.getBonecoFactory();
-		this.getLetraFactory();
+		
 		this.getRodadaFactory();
 		
 		this.getTemaFactory();
@@ -94,10 +97,9 @@ public class Aplicacao {
 	
 	private ElementoGraficoFactory getElementoGraficoFactory() {
 		if(this.tipoElementoGraficoFactory=="texto") {
-			LetraTextoFactory.getSoleInstance();
 			return ElementoGraficoTextoFactory.getSoleInstance();
 		}else if(this.tipoRepositoryFactory=="imagem") {
-		
+			
 			return ElementoGraficoImagemFactory.getSoleInstance();
 		}
 		throw new RuntimeException("Tipo de elemento gráfico não previsto");

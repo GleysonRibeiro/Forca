@@ -1,6 +1,10 @@
 package br.edu.iff.jogoforca.dominio.rodada.sorteio;
 
+import java.util.Random;
+
+import br.edu.iff.bancodepalavras.dominio.palavra.Palavra;
 import br.edu.iff.bancodepalavras.dominio.palavra.PalavraRepository;
+import br.edu.iff.bancodepalavras.dominio.tema.Tema;
 import br.edu.iff.bancodepalavras.dominio.tema.TemaRepository;
 import br.edu.iff.jogoforca.dominio.jogador.Jogador;
 import br.edu.iff.jogoforca.dominio.rodada.Rodada;
@@ -29,7 +33,18 @@ public class RodadaSorteioFactory extends RodadaFactoryImpl {
     }
 
     public Rodada getRodada(Jogador jogador){
-        throw new UnsupportedOperationException("Unimplemented method 'getRodada'");
+        Tema[] temas = this.getTemaRepository().getTodos();
+        int qtdeTemas = temas.length;
+        Random random = new Random();
+        int i = random.nextInt(qtdeTemas-1);
+        Palavra[] palavrasDoTema = this.getPalavraRepository().getPorTema(temas[i]); 
+        int qtdePalavras = palavrasDoTema.length;
+        Palavra[] palavrasSorteadas = new Palavra[Rodada.getMaxPalavras()];
+        for(int j = 0; j < Rodada.getMaxPalavras(); j++) {
+        	palavrasSorteadas[j] = palavrasDoTema[random.nextInt(qtdePalavras-1)];
+        }              
+        
+        return Rodada.criar(this.getRodadaRepository().getProximoId() , palavrasSorteadas, jogador);
     }
 
 }

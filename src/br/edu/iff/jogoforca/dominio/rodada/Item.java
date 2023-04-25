@@ -1,5 +1,7 @@
 package br.edu.iff.jogoforca.dominio.rodada;
 
+import java.util.Arrays;
+
 import br.edu.iff.bancodepalavras.dominio.letra.Letra;
 import br.edu.iff.bancodepalavras.dominio.palavra.Palavra;
 import br.edu.iff.dominio.ObjetoDominioImpl;
@@ -13,32 +15,36 @@ public class Item extends ObjetoDominioImpl{
 
     private Item (int id, Palavra palavra){
     	ObjetoDominio(id);
+    	boolean novoVetor[] = new boolean[palavra.getTamanho()];
+    	Arrays.fill(novoVetor, false);
+    	this.posicoesDescobertas = novoVetor;
         this.palavra = palavra;
     }
 
     private Item (int id, Palavra palavra, int[] posicoesDescobertas, String palavraArriscada){
     	ObjetoDominio(id);
     	this.palavra = palavra;
-    	for(int i = 0; i < posicoesDescobertas.length;i++) {
+    	boolean novoVetor[] = new boolean[palavra.getTamanho()];
+    	for(int i = 0; i < novoVetor.length;i++) {
     		if(posicoesDescobertas[i]==1) { 
-    			this.posicoesDescobertas[i]=true;    			
+    			novoVetor[i]=true;    			
     		}
     		else {
-    			this.posicoesDescobertas[i]=false;
+    			novoVetor[i]=false;
     		}
     		
     	}
-    	
+    	this.posicoesDescobertas=novoVetor;
     	this.palavraArriscada=palavraArriscada;
     		
     }
     
-    Item criar(int id, Palavra palavra) {
+    static Item criar(int id, Palavra palavra) {
     	Item item = new Item(id, palavra);
     	return item;
     }
     
-    public Item reconstituir(int id, Palavra palavra, int posicoesDescobertas[], String palavraArriscada) {
+    public static Item reconstituir(int id, Palavra palavra, int posicoesDescobertas[], String palavraArriscada) {
     	Item item = new Item(id, palavra, posicoesDescobertas, palavraArriscada);
     	
     	return item;
@@ -73,6 +79,9 @@ public class Item extends ObjetoDominioImpl{
     }
     
     public int qtdeLetrasEncobertas() {
+    	if(posicoesDescobertas==null) {
+    		return palavra.getTamanho();
+    	}
     	int cont = 0;
     	for(int i = 0;i<this.palavra.getTamanho();i++) {
     		if(this.posicoesDescobertas[i]==false) {
@@ -140,6 +149,9 @@ public class Item extends ObjetoDominioImpl{
     }
     
     public boolean acertou() {
+    	if(this.getPalavraArriscada()==null) {
+    		return false;
+    	}
     	return this.palavra.comparar(palavraArriscada);
     }
     

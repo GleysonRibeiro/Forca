@@ -18,10 +18,10 @@ public class Rodada extends ObjetoDominioImpl {
 	private static int maxErros = 10;
 	private static int pontosQuandoDescobreTodasAsPalavras = 100;
 	private static int pontosPorLetraEncoberta = 15;
-	private BonecoFactory bonecoFactory;
-	private Item[] itens;
+	private static BonecoFactory bonecoFactory;
+	private Item[] itens = new Item[maxPalavras];
 	private Jogador jogador;
-	private List<Letra> letrasErradas = null;
+	private List<Letra> letrasErradas = new ArrayList<>();
 	private Boneco boneco;
 	
 	
@@ -57,15 +57,15 @@ public class Rodada extends ObjetoDominioImpl {
 		pontosPorLetraEncoberta = pontos;
 	}
 	
-	public void setBonecoFactory (BonecoFactory bonecoFactory) {
-		this.bonecoFactory = bonecoFactory;
+	public static void setBonecoFactory (BonecoFactory factory) {
+		bonecoFactory = factory;
 	}
 	
 	public BonecoFactory getBonecoFactory() {
 		return this.bonecoFactory;
 	}
 	
-	public Rodada criar(long id, Palavra[] palavras, Jogador jogador) {
+	public static Rodada criar(long id, Palavra[] palavras, Jogador jogador) {
 		Rodada novaRodada = new Rodada(id, palavras, jogador);
 		return novaRodada;
 	}
@@ -76,27 +76,27 @@ public class Rodada extends ObjetoDominioImpl {
 	}
 	
 	private Rodada(long id, Palavra[] palavras, Jogador jogador) {
-		if(this.bonecoFactory==null) {
+		if(bonecoFactory==null) {
 			throw new RuntimeException("bonecoFactory não pode estar vazio");
 		}
 		ObjetoDominio(id);
 		for(int i = 0; i < palavras.length;i++) {
-			this.itens[i].criar(i, palavras[i]);
+			this.itens[i] = Item.criar(i, palavras[i]);
 		}
-		this.boneco = this.bonecoFactory.getBoneco();		
+		this.boneco = bonecoFactory.getBoneco();		
 		this.jogador = jogador;
 		
 	}
 	
 	private Rodada(long id, Item[] itens, Letra[] erradas, Jogador jogador) {
-		if(this.bonecoFactory==null) {
+		if(bonecoFactory==null) {
 			throw new RuntimeException("bonecoFactory não pode estar vazio");
 		}
 		ObjetoDominio(id);
 		this.itens = itens;
 		this.letrasErradas = new ArrayList<>(Arrays.asList(erradas));
 		this.jogador = jogador;
-		this.boneco = this.bonecoFactory.getBoneco();
+		this.boneco = bonecoFactory.getBoneco();
 		
 	}
 	
@@ -137,7 +137,10 @@ public class Rodada extends ObjetoDominioImpl {
 		for(int i = 0; i<this.getNumPalavras();i++) {
 			if(this.itens[i].tentar(codigo)==false) {
 				itens[i].getPalavra();
-				letrasErradas.add(Palavra.getLetraFactory().getLetra(codigo));				
+				if(!letrasErradas.contains(Palavra.getLetraFactory().getLetra(codigo))) {
+					letrasErradas.add(Palavra.getLetraFactory().getLetra(codigo));
+				}
+								
 			}
 		}
 		if(this.encerrou()==true) {
@@ -214,7 +217,12 @@ public class Rodada extends ObjetoDominioImpl {
 		return certas; 
 	}
 	public Letra[] getErradas() {
-		return (Letra[]) this.letrasErradas.toArray();
+		Letra[] erradas = new Letra[letrasErradas.size()];
+		for(int i = 0; i<letrasErradas.size();i++) {
+			erradas[i] = letrasErradas.get(i);			
+		}
+		
+		return erradas;
 	}
 	
 	public int calcularPontos() {
@@ -262,7 +270,7 @@ public class Rodada extends ObjetoDominioImpl {
 	}
 	
 	public int getQtdeTentativasRestantes() {
-		return getMaxErros() - this.getQtdeTentativas(); 
+		return getMaxErros() - this.getQtdeErros(); 
 	}
 	
 	public int getQtdeErros() {
@@ -270,6 +278,11 @@ public class Rodada extends ObjetoDominioImpl {
 	}
 	
 	public int getQtdeAcertos() {
+		/*int cont=0;
+		for(Item item:itens) {
+			cont+=item.getLetrasDescobertas().length;
+		}
+		return cont;*/
 		return this.getCertas().length;
 	}
 	
