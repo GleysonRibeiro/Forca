@@ -107,7 +107,7 @@ public class Teste {
 
         System.out.println("Total Tentativas: " + rodada.getQtdeTentativas());
         System.out.println("Tentativas Erradas: " + rodada.getQtdeErros());
-        System.out.println("Tentativas Certas: " + rodada.getQtdeTentativasRestantes());
+        System.out.println("Tentativas Certas: " + rodada.getQtdeAcertos());
         System.out.println("Arriscou: " + (rodada.arriscou() ? "sim" : "não"));
         System.out.println("Pontos: " + rodada.calcularPontos());
     }

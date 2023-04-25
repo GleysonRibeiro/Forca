@@ -136,7 +136,6 @@ public class Rodada extends ObjetoDominioImpl {
 		
 		for(int i = 0; i<this.getNumPalavras();i++) {
 			if(this.itens[i].tentar(codigo)==false) {
-				itens[i].getPalavra();
 				if(!letrasErradas.contains(Palavra.getLetraFactory().getLetra(codigo))) {
 					letrasErradas.add(Palavra.getLetraFactory().getLetra(codigo));
 				}

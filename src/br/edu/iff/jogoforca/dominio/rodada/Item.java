@@ -56,12 +56,18 @@ public class Item extends ObjetoDominioImpl{
     }
     
     public Letra[] getLetrasDescobertas() {
-    	int tamanho = this.palavra.getTamanho() - this.qtdeLetrasEncobertas();
-    	Letra[] letrasDescobertas = new Letra[tamanho];
-    	
+    	int tamanho = 0;
     	for(int i = 0;i<this.palavra.getTamanho();i++) {
     		if(this.posicoesDescobertas[i]==true) {
-    			letrasDescobertas[i]=this.palavra.getLetra(i);
+    			tamanho++;
+    		}
+    	}
+    	Letra[] letrasDescobertas = new Letra[tamanho];
+    	int j = 0;
+    	for(int i = 0;i<this.palavra.getTamanho();i++) {
+    		if(this.posicoesDescobertas[i]==true) {
+    			letrasDescobertas[j]=this.palavra.getLetra(i);
+    			j++;
     		}
     	}
     	return letrasDescobertas;
@@ -69,19 +75,18 @@ public class Item extends ObjetoDominioImpl{
     
     public Letra[] getLetrasEncobertas() {
     	Letra [] letrasEncobertas = new Letra[this.qtdeLetrasEncobertas()];
+    	int j = 0;
     	for(int i = 0;i<this.palavra.getTamanho();i++) {
     		if(this.posicoesDescobertas[i]==false) {
-    			letrasEncobertas[i]=this.palavra.getLetra(i);
+    			letrasEncobertas[j]=this.palavra.getLetra(i);
+    			j++;
     		}
     	}
     	
     	return letrasEncobertas;    	
     }
     
-    public int qtdeLetrasEncobertas() {
-    	if(posicoesDescobertas==null) {
-    		return palavra.getTamanho();
-    	}
+    public int qtdeLetrasEncobertas() {    	
     	int cont = 0;
     	for(int i = 0;i<this.palavra.getTamanho();i++) {
     		if(this.posicoesDescobertas[i]==false) {
@@ -118,6 +123,7 @@ public class Item extends ObjetoDominioImpl{
     	for(int i = 0; i < this.palavra.getTamanho();i++) {
     		if(posicoes[i]==1) {
     			this.posicoesDescobertas[i]=true;
+    			
     		}
     		else {
     			this.posicoesDescobertas[i]=false;
