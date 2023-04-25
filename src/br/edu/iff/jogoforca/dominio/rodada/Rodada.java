@@ -278,12 +278,11 @@ public class Rodada extends ObjetoDominioImpl {
 	}
 	
 	public int getQtdeAcertos() {
-		/*int cont=0;
-		for(Item item:itens) {
-			cont+=item.getLetrasDescobertas().length;
+		int cont=0;
+		for(int i = 0; i<itens.length; i++) {
+			cont+=itens[i].getLetrasDescobertas().length;
 		}
-		return cont;*/
-		return this.getCertas().length;
+		return cont;		
 	}
 	
 	public int getQtdeTentativas () {
