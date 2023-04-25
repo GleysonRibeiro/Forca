@@ -20,7 +20,11 @@ public class Palavra extends ObjetoDominioImpl {
 	}
 	
 	public static LetraFactory getLetraFactory() {
+		if(letraFactory == null) {
+			throw new RuntimeException("letraFactory não pode ser null");
+		} 
 		return letraFactory;
+		
 	}
 	
 	private Palavra(long id, String palavra, Tema tema) {

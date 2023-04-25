@@ -7,7 +7,7 @@ public class LetraTextoFactory extends LetraFactoryImpl  {
     
     private static LetraTextoFactory soleInstance = null;
     
-    public LetraTextoFactory getSoleInstance() {
+    public static LetraTextoFactory getSoleInstance() {
     	if(soleInstance!=null) {
     		return soleInstance;
     	}

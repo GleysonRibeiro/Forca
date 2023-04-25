@@ -3,6 +3,7 @@ package br.edu.iff.jogoforca.dominio.rodada;
 import br.edu.iff.jogoforca.dominio.jogador.Jogador;
 import br.edu.iff.jogoforca.dominio.jogador.JogadorNaoEncontradoException;
 import br.edu.iff.jogoforca.dominio.jogador.JogadorRepository;
+import br.edu.iff.jogoforca.dominio.rodada.sorteio.RodadaSorteioFactory;
 import br.edu.iff.repository.RepositoryException;
 
 public class RodadaAppService {
@@ -33,6 +34,7 @@ public class RodadaAppService {
 		} catch(RuntimeException e) {
 			throw new RuntimeException("Jogador não encontrado");
 		}
+		
 		Rodada novaRodada = this.factory.getRodada(jogador);
 		this.salvarRodada(novaRodada);
 		return novaRodada;

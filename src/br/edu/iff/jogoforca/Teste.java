@@ -23,6 +23,7 @@ public class Teste {
 		
 		Scanner input = new Scanner(System.in); 
 		Aplicacao aplicacao = Aplicacao.getSoleInstance();
+		aplicacao.configurar();
 		RodadaAppService rodadaAppService = RodadaAppService.getSoleInstance();
 		int opcao;
 		
