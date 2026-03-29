@@ -13,7 +13,7 @@ Projeto desenvolvido para fins acadêmicos como parte da disciplina de **Laborat
 
 - Gerenciamento de palavras e categorias.
 - Controle de tentativas e estados do jogo (Vitória/Derrota).
-- Interface interativa via console ou interface gráfica (dependendo da implementação atual).
+- Interface interativa via console.
 - Lógica de pontuação e validação de caracteres.
 
 ## 🚀 Diferenciais do Projeto
